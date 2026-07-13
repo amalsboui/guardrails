@@ -1,0 +1,13 @@
+mode: standalone
+replicas: 1
+auth:
+  existingSecret: mattermost-minio-secret
+defaultBuckets: mattermost
+persistence:
+  size: 1Gi
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 100m
+  limits:
+    memory: 512Mi

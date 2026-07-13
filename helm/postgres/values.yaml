@@ -1,0 +1,7 @@
+auth:
+  username: mmuser
+  database: mattermost
+  existingSecret: mattermost-db-secret
+primary:
+  persistence:
+    size: 2Gi
