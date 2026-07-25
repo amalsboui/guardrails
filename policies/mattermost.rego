@@ -1,8 +1,20 @@
 package main
 
+# ── Exceptions ──────────────────────────────────────────────────────────────
+# These are upstream Helm chart violations we cannot fix directly.
+# Each exception is documented in EXCEPTIONS.md with accepted risk and mitigation.
+
+# Deployments from upstream charts that violate our security baseline
+# but cannot be remediated without forking the chart.
+upstream_exceptions := {
+  "mattermost-operator",  # See EXCEPTIONS.md - operator chart constraint
+  "minio"                 # See EXCEPTIONS.md - upstream chart runs as root
+}
+
 # Deny containers running as root
 deny[msg] {
   input.kind == "Deployment"
+  not upstream_exceptions[input.metadata.name]
   container := input.spec.template.spec.containers[_]
   not container.securityContext.runAsNonRoot
   msg := sprintf("Container '%s' in Deployment '%s' must set runAsNonRoot: true", [container.name, input.metadata.name])
@@ -11,6 +23,7 @@ deny[msg] {
 # Deny containers without CPU limits
 deny[msg] {
   input.kind == "Deployment"
+  not upstream_exceptions[input.metadata.name]
   container := input.spec.template.spec.containers[_]
   not container.resources.limits.cpu
   msg := sprintf("Container '%s' in Deployment '%s' is missing CPU limit", [container.name, input.metadata.name])
@@ -19,6 +32,7 @@ deny[msg] {
 # Deny containers without memory limits
 deny[msg] {
   input.kind == "Deployment"
+  not upstream_exceptions[input.metadata.name]
   container := input.spec.template.spec.containers[_]
   not container.resources.limits.memory
   msg := sprintf("Container '%s' in Deployment '%s' is missing memory limit", [container.name, input.metadata.name])
