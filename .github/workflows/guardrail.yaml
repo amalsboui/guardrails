@@ -1,0 +1,137 @@
+name: Guardrail Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  gitleaks:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  kubeconform:
+    name: Schema Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install kubeconform
+        run: |
+          wget -q https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz
+          tar -xzf kubeconform-linux-amd64.tar.gz
+          sudo mv kubeconform /usr/local/bin/
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Render and validate Mattermost chart
+        run: |
+          helm repo add mattermost https://helm.mattermost.com
+          helm repo update
+          helm template mattermost mattermost/mattermost-operator \
+            -f helm/mattermost/values.yaml \
+            | kubeconform \
+              -strict \
+              -ignore-missing-schemas \
+              -summary
+
+      - name: Render and validate PostgreSQL chart
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm template postgres bitnami/postgresql \
+            -f helm/postgres/values.yaml \
+            | kubeconform \
+              -strict \
+              -ignore-missing-schemas \
+              -summary
+
+      - name: Render and validate MinIO chart
+        run: |
+          helm repo add minio https://charts.min.io/
+          helm template minio minio/minio \
+            -f helm/minio/values.yaml \
+            | kubeconform \
+              -strict \
+              -ignore-missing-schemas \
+              -summary
+
+  trivy:
+    name: Misconfiguration Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Render charts
+        run: |
+          helm repo add mattermost https://helm.mattermost.com
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo add minio https://charts.min.io/
+          helm repo update
+          mkdir -p rendered
+          helm template mattermost mattermost/mattermost-operator \
+            -f helm/mattermost/values.yaml > rendered/mattermost.yaml
+          helm template postgres bitnami/postgresql \
+            -f helm/postgres/values.yaml > rendered/postgres.yaml
+          helm template minio minio/minio \
+            -f helm/minio/values.yaml > rendered/minio.yaml
+
+      - name: Run Trivy config scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: config
+          scan-ref: rendered/
+          severity: HIGH,CRITICAL
+          exit-code: 0
+          format: table
+
+  conftest:
+    name: Policy Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Install Conftest
+        run: |
+          wget -q https://github.com/open-policy-agent/conftest/releases/download/v0.57.0/conftest_0.57.0_Linux_x86_64.tar.gz
+          tar -xzf conftest_0.57.0_Linux_x86_64.tar.gz
+          sudo mv conftest /usr/local/bin/
+
+      - name: Render charts
+        run: |
+          helm repo add mattermost https://helm.mattermost.com
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo add minio https://charts.min.io/
+          helm repo update
+          mkdir -p rendered
+          helm template mattermost mattermost/mattermost-operator \
+            -f helm/mattermost/values.yaml > rendered/mattermost.yaml
+          helm template postgres bitnami/postgresql \
+            -f helm/postgres/values.yaml > rendered/postgres.yaml
+          helm template minio minio/minio \
+            -f helm/minio/values.yaml > rendered/minio.yaml
+
+      - name: Run Conftest policies
+        run: |
+          conftest test rendered/ \
+            --policy policies/ \
+            --all-namespaces
