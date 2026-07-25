@@ -1,5 +1,16 @@
 package main
 
+# ── Exceptions ──────────────────────────────────────────────────────────────
+# These are upstream Helm chart violations we cannot fix directly.
+# Each exception is documented in EXCEPTIONS.md with accepted risk and mitigation.
+
+# Deployments from upstream charts that violate our security baseline
+# but cannot be remediated without forking the chart.
+upstream_exceptions := {
+  "mattermost-operator",  # See EXCEPTIONS.md - operator chart constraint
+  "minio"                 # See EXCEPTIONS.md - upstream chart runs as root
+}
+
 # Deny containers running as root
 deny[msg] {
   input.kind == "Deployment"
