@@ -98,7 +98,14 @@ jobs:
           scan-ref: rendered/
           severity: HIGH,CRITICAL
           exit-code: 0
-          format: table
+          format: sarif
+          output: trivy-results.sarif
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
 
   conftest:
     name: Policy Validation
