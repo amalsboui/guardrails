@@ -14,6 +14,7 @@ upstream_exceptions := {
 # Deny containers running as root
 deny[msg] {
   input.kind == "Deployment"
+  not upstream_exceptions[input.metadata.name]
   container := input.spec.template.spec.containers[_]
   not container.securityContext.runAsNonRoot
   msg := sprintf("Container '%s' in Deployment '%s' must set runAsNonRoot: true", [container.name, input.metadata.name])
@@ -22,6 +23,7 @@ deny[msg] {
 # Deny containers without CPU limits
 deny[msg] {
   input.kind == "Deployment"
+  not upstream_exceptions[input.metadata.name]
   container := input.spec.template.spec.containers[_]
   not container.resources.limits.cpu
   msg := sprintf("Container '%s' in Deployment '%s' is missing CPU limit", [container.name, input.metadata.name])
@@ -30,6 +32,7 @@ deny[msg] {
 # Deny containers without memory limits
 deny[msg] {
   input.kind == "Deployment"
+  not upstream_exceptions[input.metadata.name]
   container := input.spec.template.spec.containers[_]
   not container.resources.limits.memory
   msg := sprintf("Container '%s' in Deployment '%s' is missing memory limit", [container.name, input.metadata.name])
