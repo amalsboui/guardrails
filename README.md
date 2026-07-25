@@ -1,0 +1,1 @@
+![Guardrail Pipeline](https://github.com/amalsboui/guardrails/actions/workflows/guardrail.yaml/badge.svg)
