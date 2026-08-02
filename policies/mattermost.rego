@@ -59,3 +59,19 @@ deny[msg] {
   input.spec.type == "LoadBalancer"
   msg := sprintf("Service '%s' must not use LoadBalancer - use ClusterIP and route through ingress", [input.metadata.name])
 }
+
+# Deny hardcoded sensitive env vars
+deny[msg] {
+  input.kind == "Deployment"
+  container := input.spec.template.spec.containers[_]
+  env := container.env[_]
+  sensitive_names := {"PASSWORD", "SECRET", "KEY", "TOKEN", "CREDENTIAL"}
+  upper_name := upper(env.name)
+  contains(upper_name, sensitive_names[_])
+  env.value != ""
+  not env.valueFrom
+  msg := sprintf(
+    "SECURITY: Container '%s' has hardcoded sensitive env var '%s' - use SecretKeyRef",
+    [container.name, env.name]
+  )
+}
