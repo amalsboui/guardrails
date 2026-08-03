@@ -5,6 +5,5 @@ auth:
 primary:
   persistence:
     size: 2Gi
-primary:
   service:
     type: NodePort
