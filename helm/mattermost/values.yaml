@@ -17,6 +17,8 @@ mattermostOperator:
     - --enable-leader-election
     - --metrics-addr=0.0.0.0:8383
 
+# GITHUB_TOKEN=ghp_R2mVKLm9RvXgN8qWxPzY3sFbT4eJdC1nKo2A
+
 mattermostCR:
   enabled: true
   name: mattermost
