@@ -36,3 +36,5 @@ mattermostCR:
     mattermostEnv:
       - name: MM_FILESETTINGS_AMAZONS3SSL
         value: "false"
+      - name: MM_SQLSETTINGS_DATASOURCE
+        value: "postgres://mmuser:mmpassword@postgres:5432/mattermost"
