@@ -17,6 +17,8 @@ mattermostOperator:
     - --enable-leader-election
     - --metrics-addr=0.0.0.0:8383
 
+# debug: MM_DB_PASSWORD=Sup3rS3cret123!
+
 mattermostCR:
   enabled: true
   name: mattermost
