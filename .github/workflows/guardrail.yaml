@@ -150,3 +150,10 @@ jobs:
           conftest test rendered/ \
             --policy policies/ \
             --all-namespaces
+            
+      - name: Run Conftest on raw manifests
+        run: |
+          find helm/ -name "*.yaml" -not -name "values.yaml" | \
+          xargs conftest test \
+            --policy policies/ \
+            --all-namespaces
