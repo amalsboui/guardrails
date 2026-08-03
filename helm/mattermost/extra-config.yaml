@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mattermost-test
+  namespace: mattermost
+spec:
+  replicas: 1
+  selectoor:
+    matchLabels:
+      app: mattermost-test
+  template:
+    metadata:
+      labels:
+        app: mattermost-test
+    spec:
+      containers:
+        - name: mattermost
+          image: mattermost/mattermost-enterprise-edition:10.10.1
+          invalidSpecField: "this-will-fail-schema-validation"
