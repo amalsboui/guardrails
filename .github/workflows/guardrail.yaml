@@ -66,6 +66,14 @@ jobs:
               -strict \
               -ignore-missing-schemas \
               -summary
+      
+      - name: Validate raw manifests
+        run: |
+          find helm/ -name "*.yaml" -not -name "values.yaml" -print0 | \
+          xargs -0 kubeconform \
+            -strict \
+            -ignore-missing-schemas \
+            -summary
 
   trivy:
     name: Misconfiguration Scanning
