@@ -116,7 +116,7 @@ Every Pull Request to `main` triggers four automated checks that run in parallel
 | Resource limits | CPU and memory limits mandatory |
 | No privileged containers | `privileged: true` always blocked |
 | No NodePort services | External access via ingress only |
-| No LoadBalancer services | Same — no direct cloud LB exposure |
+| No LoadBalancer services | Same, no direct cloud LB exposure |
 | No hardcoded secrets | Sensitive env vars must use SecretKeyRef |
 
 Known upstream chart violations that cannot be remediated are documented in [EXCEPTIONS.md](./EXCEPTIONS.md) with accepted risk rather than silently ignored.
@@ -131,7 +131,7 @@ No secret exists in git or in a manually created Kubernetes Secret.
 
 1. Secret stored in Vault (single source of truth)
 2. ExternalSecret resource tells ESO what to sync and where
-3. ESO authenticates to Vault using the pod's ServiceAccount token — no static credentials
+3. ESO authenticates to Vault using the pod's ServiceAccount token, no static credentials
 4. ESO creates and keeps the Kubernetes Secret in sync automatically
 5. Application pods consume the Secret normally
 
@@ -139,11 +139,11 @@ Vault uses the Kubernetes auth method. Pods prove identity via their ServiceAcco
 
 ---
 
-## Runtime Security — Falco
+## Runtime Security - Falco
 
-Falco runs as a DaemonSet using eBPF to monitor syscalls inside every running container. While the pipeline prevents bad config from reaching the cluster, Falco catches exploitation of vulnerabilities in already-running applications — something static analysis cannot do.
+Falco runs as a DaemonSet using eBPF to monitor syscalls inside every running container. While the pipeline prevents bad config from reaching the cluster, Falco catches exploitation of vulnerabilities in already-running applications, something static analysis cannot do.
 
-A custom rule alerts when any process spawns a shell inside the `mattermost` namespace — the first signal of a container escape or unauthorized exec access.
+A custom rule alerts when any process spawns a shell inside the `mattermost` namespace. It is the first signal of a container escape or unauthorized exec access.
 
 ---
 
@@ -171,11 +171,11 @@ k3d cluster create guardrail --agents 2
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-# Last manual apply — ArgoCD manages everything after this
+# Last manual apply, ArgoCD manages everything after this
 kubectl apply -f https://raw.githubusercontent.com/amalsboui/mattermost-gitops-state/main/apps/root.yaml
 ```
 
-**Vault initialization** (one-time, after Vault pod is Running — see [vault-setup.md](vault-setup.md))
+**Vault initialization** (one-time, after Vault pod is Running, see [vault-setup.md](vault-setup.md))
 
 ---
 
