@@ -1,5 +1,20 @@
 # Guardrails - GitOps Security Pipeline for Mattermost on Kubernetes
-![Guardrail Pipeline](https://github.com/amalsboui/guardrails/actions/workflows/guardrail.yaml/badge.svg) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI/CD-black) ![ArgoCD](https://img.shields.io/badge/ArgoCD-GitOps-orange) ![Helm](https://img.shields.io/badge/Helm-Kubernetes_Packaging-blue) ![Kubernetes](https://img.shields.io/badge/Kubernetes-k3d-blue) ![Mattermost Operator](https://img.shields.io/badge/Mattermost_Operator-CRD_Controller-purple) ![Vault](https://img.shields.io/badge/Vault-Secrets_Management-black) ![External Secrets](https://img.shields.io/badge/External_Secrets_Operator-Secret_Sync-green) ![Falco](https://img.shields.io/badge/Falco-Runtime_Security-blue) ![OPA](https://img.shields.io/badge/OPA-Policy_as_Code-purple) ![Trivy](https://img.shields.io/badge/Trivy-Security_Scanning-red) ![kubeconform](https://img.shields.io/badge/kubeconform-Schema_Validation-lightgrey)
+<div align="center">
+
+![Guardrail Pipeline](https://github.com/amalsboui/guardrails/actions/workflows/guardrail.yaml/badge.svg)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI/CD-black)
+![ArgoCD](https://img.shields.io/badge/ArgoCD-GitOps-orange)
+![Helm](https://img.shields.io/badge/Helm-Kubernetes_Packaging-blue)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-k3d-blue)
+![Mattermost Operator](https://img.shields.io/badge/Mattermost_Operator-CRD_Controller-purple)
+![Vault](https://img.shields.io/badge/Vault-Secrets_Management-black)
+![External Secrets](https://img.shields.io/badge/External_Secrets_Operator-Secret_Sync-green)
+![Falco](https://img.shields.io/badge/Falco-Runtime_Security-blue)
+![OPA](https://img.shields.io/badge/OPA-Policy_as_Code-purple)
+![Trivy](https://img.shields.io/badge/Trivy-Security_Scanning-red)
+![kubeconform](https://img.shields.io/badge/kubeconform-Schema_Validation-lightgrey)
+
+</div>
 
 A GitOps platform deploying Mattermost on Kubernetes with a pre-sync guardrail pipeline that validates every change **before ArgoCD ever touches the cluster**. The cluster only runs what has passed policy, schema, and vulnerability checks.
 
