@@ -1,5 +1,5 @@
-# Guardrails — GitOps Security Pipeline for Mattermost on Kubernetes
-![Guardrail Pipeline](https://github.com/amalsboui/guardrails/actions/workflows/guardrail.yaml/badge.svg) ![ArgoCD](https://img.shields.io/badge/ArgoCD-GitOps-orange) ![Falco](https://img.shields.io/badge/Falco-Runtime_Security-blue) ![Vault](https://img.shields.io/badge/Vault-Secrets_Management-black) ![OPA](https://img.shields.io/badge/OPA-Policy_as_Code-purple) ![Kubernetes](https://img.shields.io/badge/Kubernetes-k3d-blue)
+# Guardrails - GitOps Security Pipeline for Mattermost on Kubernetes
+![Guardrail Pipeline](https://github.com/amalsboui/guardrails/actions/workflows/guardrail.yaml/badge.svg) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI/CD-black) ![ArgoCD](https://img.shields.io/badge/ArgoCD-GitOps-orange) ![Helm](https://img.shields.io/badge/Helm-Kubernetes_Packaging-blue) ![Kubernetes](https://img.shields.io/badge/Kubernetes-k3d-blue) ![Mattermost Operator](https://img.shields.io/badge/Mattermost_Operator-CRD_Controller-purple) ![Vault](https://img.shields.io/badge/Vault-Secrets_Management-black) ![External Secrets](https://img.shields.io/badge/External_Secrets_Operator-Secret_Sync-green) ![Falco](https://img.shields.io/badge/Falco-Runtime_Security-blue) ![OPA](https://img.shields.io/badge/OPA-Policy_as_Code-purple) ![Trivy](https://img.shields.io/badge/Trivy-Security_Scanning-red) ![kubeconform](https://img.shields.io/badge/kubeconform-Schema_Validation-lightgrey)
 
 A GitOps platform deploying Mattermost on Kubernetes with a pre-sync guardrail pipeline that validates every change **before ArgoCD ever touches the cluster**. The cluster only runs what has passed policy, schema, and vulnerability checks.
 
@@ -17,21 +17,21 @@ ArgoCD doesn't know. It syncs whatever is in git.
 ---
 ## Architecture
 
-![Architecture](images/infra.png)
+![Architecture](images/architecture.png)
 
 ---
 ## Two-Repo Structure
 
 The project is split across two repositories with a deliberate separation of concerns:
 
-**`guardrails`** (this repo) — the engineering repo. Contains:
+**`guardrails`** (this repo) is the engineering repo. Contains:
 - Helm values overrides for every deployed component
 - OPA/Rego security policies
 - The GitHub Actions guardrail pipeline
 - Vault and External Secrets configuration
 - Documentation
 
-**[`mattermost-gitops-state`](https://github.com/amalsboui/mattermost-gitops-state)** — the cluster state repo. Contains only ArgoCD Application manifests. This is the single source of truth for what should be running in the cluster. ArgoCD watches this repo and reconciles the cluster to match it continuously.
+**[`mattermost-gitops-state`](https://github.com/amalsboui/mattermost-gitops-state)** is the cluster state repo. Contains only ArgoCD Application manifests. This is the single source of truth for what should be running in the cluster. ArgoCD watches this repo and reconciles the cluster to match it continuously.
 
 The pipeline runs on the `guardrails` repo. ArgoCD watches the `mattermost-gitops-state` repo. These two concerns never mix. CI never touches the cluster directly, and ArgoCD never runs application logic.
 
@@ -160,7 +160,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 kubectl apply -f https://raw.githubusercontent.com/amalsboui/mattermost-gitops-state/main/apps/root.yaml
 ```
 
-**Vault initialization** (one-time, after Vault pod is Running — see [docs/vault-setup.md](./docs/vault-setup.md))
+**Vault initialization** (one-time, after Vault pod is Running — see [vault-setup.md](vault-setup.md))
 
 ---
 
