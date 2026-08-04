@@ -2,17 +2,17 @@
 <div align="center">
 
 ![Guardrail Pipeline](https://github.com/amalsboui/guardrails/actions/workflows/guardrail.yaml/badge.svg)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI/CD-black)
-![ArgoCD](https://img.shields.io/badge/ArgoCD-GitOps-orange)
-![Helm](https://img.shields.io/badge/Helm-Kubernetes_Packaging-blue)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-k3d-blue)
-![Mattermost Operator](https://img.shields.io/badge/Mattermost_Operator-CRD_Controller-purple)
-![Vault](https://img.shields.io/badge/Vault-Secrets_Management-black)
-![External Secrets](https://img.shields.io/badge/External_Secrets_Operator-Secret_Sync-green)
-![Falco](https://img.shields.io/badge/Falco-Runtime_Security-blue)
-![OPA](https://img.shields.io/badge/OPA-Policy_as_Code-purple)
-![Trivy](https://img.shields.io/badge/Trivy-Security_Scanning-red)
-![kubeconform](https://img.shields.io/badge/kubeconform-Schema_Validation-lightgrey)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI/CD-black?logo=githubactions)
+![ArgoCD](https://img.shields.io/badge/ArgoCD-GitOps-orange?logo=argo)
+![Helm](https://img.shields.io/badge/Helm-Kubernetes_Packaging-blue?logo=helm)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-k3d-blue?logo=kubernetes)
+![Mattermost Operator](https://img.shields.io/badge/Mattermost_Operator-CRD_Controller-purple?logo=mattermost)
+![Vault](https://img.shields.io/badge/Vault-Secrets_Management-black?logo=vault)
+![External Secrets](https://img.shields.io/badge/External_Secrets_Operator-Secret_Sync-green?logo=kubernetes)
+![Falco](https://img.shields.io/badge/Falco-Runtime_Security-blue?logo=falco)
+![OPA](https://img.shields.io/badge/OPA-Policy_as_Code-purple?logo=openpolicyagent)
+![Trivy](https://img.shields.io/badge/Trivy-Security_Scanning-red?logo=aquasecurity)
+![kubeconform](https://img.shields.io/badge/kubeconform-Schema_Validation-lightgrey?logo=kubernetes)
 
 </div>
 
